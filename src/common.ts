@@ -1,15 +1,15 @@
 import {
-    AxesHelper,
-    Camera,
-    Clock,
-    Euler,
-    Group,
-    Mesh,
-    PerspectiveCamera,
-    Renderer,
-    Scene,
-    Vector3,
-    WebGLRenderer,
+  AxesHelper,
+  Camera,
+  Clock,
+  Euler,
+  Group,
+  Mesh,
+  PerspectiveCamera,
+  Renderer,
+  Scene,
+  Vector3,
+  WebGLRenderer,
 } from 'three';
 
 import { Animator, AnimatorParams, ScreenSize } from './types';
@@ -43,18 +43,23 @@ export class Common {
   }
 
   initAnimationLoop(
-    animator: Animator,
-    animatorParams: AnimatorParams,
     renderer: Renderer,
-    scene: Scene
+    scene: Scene,
+    camera: Camera,
+    animatorParams?: AnimatorParams,
+    animator?: Animator
   ) {
     const clock = new Clock();
     const tick = () => {
-      this.animateScenery(animator, {
-        ...animatorParams,
-        elapsedTime: clock.getElapsedTime(),
-      });
-      renderer.render(scene, animatorParams.camera);
+      animator &&
+        animatorParams &&
+        this.animateScenery(animator, {
+          elapsedTime: clock.getElapsedTime(),
+          cubesGroup: animatorParams.cubesGroup,
+          camera,
+          meshes: animatorParams.meshes,
+        });
+      renderer.render(scene, camera);
       window.requestAnimationFrame(tick);
     };
     tick();
