@@ -1,10 +1,13 @@
-import { Group, Mesh } from 'three';
+import { Camera, Renderer, Scene } from 'three';
 
 export type ScreenSize = { width: number; height: number };
 
-export type Animator = (params: AnimatorParams) => void;
+export type Animator = (params: any) => void;
 
-export type AnimatorParams = {
-  cubesGroup: Group;
-  meshes: Array<Mesh>;
+export type LoopParams = {
+  renderer: Renderer;
+  scene: Scene;
+  camera: Camera;
+  animatorParams?: any;
+  animator?: Animator;
 };

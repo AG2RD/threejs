@@ -24,7 +24,11 @@ export class AnimationScene extends AbstractTheatre {
       x: 3,
     });
     this.gsapAnimation(this.camera, { duration: 10, delay: 1, x: -3 });
-    this.common.initAnimationLoop(this.renderer, this.scenes[0], this.camera);
+    this.common.initAnimationLoop({
+      renderer: this.renderer,
+      scene: this.scenes[0],
+      camera: this.camera,
+    });
   }
 
   getMeshes(cubeNames: Array<string>): Array<Mesh> {

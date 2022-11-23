@@ -1,10 +1,12 @@
 import {
   AxesHelper,
+  BoxGeometry,
   Camera,
-  Clock,
+  Color,
   Euler,
   Group,
   Mesh,
+  MeshBasicMaterial,
   PerspectiveCamera,
   Renderer,
   Scene,
@@ -12,7 +14,7 @@ import {
   WebGLRenderer,
 } from 'three';
 
-import { Animator, AnimatorParams, ScreenSize } from './types';
+import { Animator, LoopParams, ScreenSize } from './types';
 
 const transformations = {
   POSITION: (mesh: Mesh, vector: Euler | Vector3) =>
@@ -23,15 +25,7 @@ const transformations = {
     mesh.scale.set(vector.x, vector.y, vector.z),
 };
 export class Common {
-  animateScenery(
-    animator: Animator,
-    params: {
-      cubesGroup: Group;
-      elapsedTime: number;
-      camera: Camera;
-      meshes: Array<Mesh>;
-    }
-  ): any {
+  animateScenery(animator: Animator, params: any): any {
     animator(params);
   }
   createGroupMeshes(objects: Array<Mesh>): Group {
@@ -42,23 +36,17 @@ export class Common {
     return group;
   }
 
-  initAnimationLoop(
-    renderer: Renderer,
-    scene: Scene,
-    camera: Camera,
-    animatorParams?: AnimatorParams,
-    animator?: Animator
-  ) {
-    const clock = new Clock();
+  initAnimationLoop({
+    renderer,
+    scene,
+    camera,
+    animatorParams,
+    animator,
+  }: LoopParams) {
     const tick = () => {
       animator &&
         animatorParams &&
-        this.animateScenery(animator, {
-          elapsedTime: clock.getElapsedTime(),
-          cubesGroup: animatorParams.cubesGroup,
-          camera,
-          meshes: animatorParams.meshes,
-        });
+        this.animateScenery(animator, animatorParams);
       renderer.render(scene, camera);
       window.requestAnimationFrame(tick);
     };
@@ -103,5 +91,15 @@ export class Common {
     vector: Euler | Vector3
   ) {
     transformations[transformationName](mesh, vector);
+  }
+
+  getMeshes(cubeNames: Array<string>): Array<Mesh> {
+    return cubeNames.map(
+      () =>
+        new Mesh(
+          new BoxGeometry(1, 1, 1),
+          new MeshBasicMaterial({ color: new Color(Math.random() * 0xffffff) })
+        )
+    );
   }
 }
