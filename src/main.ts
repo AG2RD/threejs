@@ -1,7 +1,7 @@
 import './style.css';
 
 import { AnimationScene } from './animation/animation';
-import { Common } from './common';
+import { Common } from './common/common';
 
 // import { BasicScene } from './basic-scene/basic-scene';
 export class Application {
